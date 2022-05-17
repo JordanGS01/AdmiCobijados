@@ -3,6 +3,9 @@ import "./newProduct.css";
 import {v4 as uuidv4} from 'uuid'
 import { insertNewProduct } from "../../FireStore/dbInitialize";
 
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+
 export default function NewProduct() {
   //<input type="file" id="file" />   <<----OJO
   const [imagen,setImagen] = useState('');
@@ -11,8 +14,9 @@ export default function NewProduct() {
   const [talla,setTalla] = useState('');
   const [cantidad,setCantidad] = useState(0);
   const [precio,setPrecio] = useState(0);
-  const [coleccion,setColeccion] = useState('');
+  const [categoria,setCategoria] = useState('');
   const [descripcion,setDescripcion] = useState('');
+  const [marca,setMarca] = useState('');
 
   function handleOnSubmit(e){
     e.preventDefault();
@@ -24,28 +28,30 @@ export default function NewProduct() {
        nombre !== '' &&
        genero !== '' &&
        talla  !== '' &&
-       coleccion !== '' &&      
+       categoria !== '' &&      
        precio !== 0 ){
          const product = {
            cantidad: cantidad,
-           categoria: genero,
+           categoria: categoria,
            descripcion: descripcion,
            id: uuidv4(),
            img: imagen,
            nombre: nombre,
            precio: precio,
-           talla: talla
+           talla: talla,
+           marca: marca
          }
-         insertNewProduct(product,coleccion);
+         insertNewProduct(product,'Productos');
         
          //Ahora se resetean los valores de las variables
          setImagen('');
          setNombre('');
          setGenero('');
          setTalla('');
+         setMarca('');
          setCantidad(0);
          setPrecio(0);
-         setColeccion('');
+         setCategoria('');
          setDescripcion('');
 
          //TODO: Imprimir un msj donde especifique si se tuvo exito o no en la inserción
@@ -66,97 +72,94 @@ export default function NewProduct() {
     if(e.target.name === 'img'){
       setImagen(value);
     }
-    if(e.target.name === 'nombre'){
+    else if(e.target.name === 'nombre'){
       setNombre(value);
     }
-    if(e.target.name === 'genero'){
-      setGenero(value);
+    else if(e.target.name === 'genero'){
+      setGenero(value);///////////////////////////////OJO
     }
-    if(e.target.name === 'talla'){
+    else if(e.target.name === 'talla'){
       setTalla(value);
     }
-    if(e.target.name === 'cantidad'){
+    else if(e.target.name === 'cantidad'){
       setCantidad(value);
     }
-    if(e.target.name === 'precio'){
+    else if(e.target.name === 'precio'){
       setPrecio(value);
     }
-    if(e.target.name === 'coleccion'){
-      setColeccion(value);
-      console.log(coleccion)
+    else if(e.target.name === 'categoria'){
+      setCategoria(value);
     }
-    if(e.target.name === 'descripcion'){
+    else if(e.target.name === 'descripcion'){
       setDescripcion(value);
     }
+    else if(e.target.name === 'marca'){
+      setMarca(value);
+    }
   }
-  return (
-    <div className="newProduct">
-      <h1 className="addProductTitle">Nuevo Producto</h1>
-      <form className="addProductForm" action="" onSubmit={handleOnSubmit}>
-        
-        <div className="addProductItem">
-          <label>Imagen</label>
-          <input name="img" type="text" placeholder="URL" onChange={handleOnChange} required/>
-        </div>
-        
-        <div className="addProductItem">
-          <label>Nombre</label>
-          <input name="nombre" type="text" placeholder="Camiseta Nike Roja" onChange={handleOnChange} required/>
-        </div>
-        
-        <div className="addProductItem">
-          <label>Género</label>
-          <select name="genero" onChange={handleOnChange}>
-            <option value="" selected></option>
-            <option value="H" >Hombre</option>
-            <option value="M">Mujer</option>
-          </select>
-        </div>
 
-        <div className="addProductItem">
-          <label>Talla</label>
-          <select name="talla" onChange={handleOnChange}>
+  return (
+    <div className="d-inline-flex p-2 flex-column border rounded">
+      <h1 className="display-2">Nuevo Producto</h1>
+      <Form onSubmit={handleOnSubmit}>
+        <Form.Group className='mb-3' controlId='productFormImg'>
+          <Form.Label>Imagen</Form.Label>
+          <Form.Control name='img' type='text' placeholder='URL de la imágen' onChange={handleOnChange} required/>
+        </Form.Group>
+
+        <Form.Group className='mb-3' controlId='productFormNombre'>
+          <Form.Label>Nombre</Form.Label>
+          <Form.Control name='nombre' type='text' placeholder='Nombre' onChange={handleOnChange} required/>
+        </Form.Group>
+
+        <Form.Group className='mb-3' controlId='productFormTalla'>
+          <Form.Label>Talla</Form.Label>
+          <Form.Select name='talla' onChange={handleOnChange}>
             <option value="" selected></option>
-            <option value="XSS">XSS</option>
+            <option value="XXS">XXS</option>
             <option value="XS">XS</option>
             <option value="S">S</option>
             <option value="M">M</option>
             <option value="L">L</option>
             <option value="XL">XL</option>
             <option value="XXL">XXL</option>
-          </select>
-        </div>
+          </Form.Select>
+        </Form.Group>
 
-        <div className="addProductItem">
-          <label>Cantidad</label>
-          <input name="cantidad" type="number" placeholder="10" onChange={handleOnChange} required/>
-        </div>
-        
-        <div className="addProductItem">
-          <label>Precio</label>
-          <input name="precio" type="number" onChange={handleOnChange} required/>
-        </div>
+        <Form.Group className='mb-3' controlId='productFormCantidad'>
+          <Form.Label>Cantidad</Form.Label>
+          <Form.Control name='cantidad' type='number' placeholder='Cantidad' onChange={handleOnChange} required/>
+        </Form.Group>
 
-        <div className="addProductItem">
-          <label>Categoría</label>
-          <select name="coleccion" onChange={handleOnChange}>
+        <Form.Group className='mb-3' controlId='productFormPrecio'>
+          <Form.Label>Precio</Form.Label>
+          <Form.Control name='precio' type='number' placeholder='Precio' onChange={handleOnChange} required/>
+        </Form.Group>
+
+        <Form.Group className='mb-3' controlId='productFormMarca'>
+          <Form.Label>Marca</Form.Label>
+          <Form.Control name='marca' type='text' placeholder='Precio' onChange={handleOnChange} required/>
+        </Form.Group>
+
+        <Form.Group className='mb-3' controlId='productFormCategoria'>
+          <Form.Label>Categoría</Form.Label>
+          <Form.Select name='categoria' onChange={handleOnChange}>
             <option value="" selected></option>
-            <option value="Camisas">Camisa</option>
-            <option value="Camiseta para niño">Camiseta para niño</option>
-            <option value="pantalones">Pantalon</option>
-            <option value="Pantalonetas">Pantaloneta</option>
-            <option value="blusas">Blusas</option>
-            <option value="jogger">Jogger</option>
-          </select>
-        </div>
+            <option value="Adulto">Adultos</option>
+            <option value="Niños">Niños</option>
+            <option value="Jovenes">Jovenes</option>
+          </Form.Select>
+        </Form.Group>
+        
+        <Form.Group className="mb-3" controlId="productFormDescripción">
+          <Form.Label>Descripción</Form.Label>
+          <Form.Control name="descripcion" as="textarea" rows={3} />
+        </Form.Group>        
 
-        <div className="addProductItem">
-          <label>Descripción</label>
-          <textarea name="descripcion" onChange={handleOnChange}></textarea>
-        </div>
-
-        <input type="submit" value="Crear"/>
-      </form>
+        <Button variant="primary" type="submit">
+          Crear
+        </Button>
+      </Form>
     </div>
   );
 }

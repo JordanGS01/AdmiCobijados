@@ -6,9 +6,10 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProducts } from "../../FireStore/data"
 
+import Button from 'react-bootstrap/Button'
+
 export default function ProductList() {  
   const [data, setData] = useState([]);
-
 
   async function uploadData(){
     const uploadProducts = await getProducts()  
@@ -18,7 +19,6 @@ export default function ProductList() {
 
   useEffect(() => {
     uploadData();
-    console.log(data)
   }, []);
 
   const handleDelete = (id) => {
@@ -84,19 +84,13 @@ export default function ProductList() {
       },
     },
   ];
-//El botoncillo de agregar necesita ir rodeado por Link que 
-//redireccione a una pagina para agregar los datos de un nuevo producto.
 
-//FALTA AGREGAR UN COMBOBOX PARA LAS CATEGORIAS EXISTENTES
   return (
     <div className="productList">
       <Link to="/newproduct">
-        <button>Botoncillo de agregar</button>
+        <Button variant="primary">Agregar producto</Button>        
       </Link>
       
-
-      <input type="text" placeholder='Nombre producto'/>
-      <button>Botoncillo buscar con img de lupa</button>
       {
       <DataGrid
         rows={data}
