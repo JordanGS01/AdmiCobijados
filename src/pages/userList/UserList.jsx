@@ -5,12 +5,18 @@ import TableDisplay from '../../components/TableDisplay/TableDisplay'
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getElements } from '../../FireStore/dbInitialize'
+import { getElements, updateStatus } from '../../FireStore/dbInitialize'
 
 import NA from '../../images/NA.png'
 
 export default function UserList() {
   const [data, setData] = useState([{}])
+  const desabilitar = async (params) =>{
+    params.status = !params.status
+    await updateStatus(params)
+    window.location.reload(false);
+}
+
   const columns = [{field:"nombre",headerName:"Nombre"},
                    {field:"img",headerName:"Img",
                       accion:(params)=>{                        
@@ -26,7 +32,8 @@ export default function UserList() {
                       accion:(params)=>{
                         return(
                           <>
-                            <Button variant="primary">Deshabilitar</Button>
+                            <Button variant="primary" onClick={(event) => {
+                              if (window.confirm(`¿Seguro que desea ${params.status === true? "desabilitar": "habilitar"} a: `+ params.nombre)) desabilitar(params)}}>{params.status === true? "Desabilitar": "Habilitar"}</Button>
                             <Link to={`/user/${params.id}`}>
                               <Button variant="primary">Ver</Button>
                             </Link>

@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
-import {getDocs, collection, addDoc, query, where} from "firebase/firestore"
+import {getDocs, collection, addDoc, query, where, setDoc, doc} from "firebase/firestore"
 
 //TODO: IMPORTANTISIMO, MOVER ESTOS DATOS A UN .env
 const firebaseConfig = {
@@ -51,6 +51,13 @@ const getElements = async (col) => {
   }
 };
 
-export { getElements };
+const updateProduct = (products)=>{
+  return setDoc(doc(db, "Productos", products.id), products);
+}
 
-export { db };
+const updateStatus = async (params)=>{
+  return setDoc(doc(db, "Usuarios", params.id), params);
+}
+
+
+export { getElements, updateProduct, updateStatus, db };

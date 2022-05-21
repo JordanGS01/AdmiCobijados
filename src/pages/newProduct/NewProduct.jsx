@@ -154,7 +154,7 @@ export default function NewProduct() {
         
         <Form.Group className="mb-3" controlId="productFormDescripción">
           <Form.Label>Descripción</Form.Label>
-          <Form.Control name="descripcion" as="textarea" rows={3} />
+          <Form.Control name="descripcion" as="textarea" rows={3} onChange={handleOnChange}/>
         </Form.Group>        
 
         <Button variant="primary" type="submit">
