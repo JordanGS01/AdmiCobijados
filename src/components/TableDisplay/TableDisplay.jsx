@@ -22,6 +22,7 @@ export default function TableDisplay(props){
             </thead>
             <tbody>
                 {props.data.map(object => {
+                    console.log(object.id)
                     return(
                         <tr>
                             {props.columns.map((column)=>{
@@ -29,7 +30,7 @@ export default function TableDisplay(props){
                                     <th>
                                         {column.hasOwnProperty('accion')?
                                         column.accion(object):
-                                        object[column.field]}
+                                        String(object[column.field])}
                                     </th>
                                 )
                             })}

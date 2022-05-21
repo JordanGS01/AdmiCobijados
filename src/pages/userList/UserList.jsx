@@ -1,31 +1,35 @@
 import "./userList.css";
 
 import { Button } from "react-bootstrap";
-
-import { useEffect, useState } from "react";
 import TableDisplay from '../../components/TableDisplay/TableDisplay'
 
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getElements } from '../../FireStore/dbInitialize'
+
+import NA from '../../images/NA.png'
 
 export default function UserList() {
   const [data, setData] = useState([{}])
   const columns = [{field:"nombre",headerName:"Nombre"},
                    {field:"img",headerName:"Img",
-                      accion:(params)=>{
-                        return(
-                          <img className="TableImg" src={params.img} alt="Imágen del usuario" />
+                      accion:(params)=>{                        
+                        return(                          
+                          <img className="TableImg" src={params.img!=''?params.img:NA} alt="Imágen del usuario" />
                         )
                       }},
                    {field:"correo",headerName:"Correo"},
                    {field:"direccion",headerName:"Direccion"},
-                   {field:"codigo postal",headerName:"Codigo postal"},
+                   {field:"codigo_postal",headerName:"Codigo postal"},
                    {field:"status",headerName:"Status"},
                    {field:"accion",headerName:"Acción", 
                       accion:(params)=>{
                         return(
                           <>
                             <Button variant="primary">Deshabilitar</Button>
-                            <Button variant="primary">Ver</Button>
+                            <Link to={`/user/${params.id}`}>
+                              <Button variant="primary">Ver</Button>
+                            </Link>
                           </>
                         )
                       }}]
