@@ -15,7 +15,6 @@ export default function Topbar() {
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/users">Usuarios</Nav.Link>
             <Nav.Link as={Link} to="/products">Productos</Nav.Link>
-            <Nav.Link as={Link} to="/users">Pricing</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
