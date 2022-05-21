@@ -10,7 +10,6 @@ export default function NewProduct() {
   //<input type="file" id="file" />   <<----OJO
   const [imagen,setImagen] = useState('');
   const [nombre,setNombre] = useState('');
-  const [genero,setGenero] = useState('');
   const [talla,setTalla] = useState('');
   const [cantidad,setCantidad] = useState(0);
   const [precio,setPrecio] = useState(0);
@@ -21,12 +20,17 @@ export default function NewProduct() {
   function handleOnSubmit(e){
     e.preventDefault();
     addData();
+    
   }
 
   function addData(){
+    console.log(imagen)
+    console.log(nombre)
+    console.log(talla)
+    console.log(categoria)
+    console.log(precio)
     if(imagen !== '' &&
        nombre !== '' &&
-       genero !== '' &&
        talla  !== '' &&
        categoria !== '' &&      
        precio !== 0 ){
@@ -34,7 +38,6 @@ export default function NewProduct() {
            cantidad: cantidad,
            categoria: categoria,
            descripcion: descripcion,
-           id: uuidv4(),
            img: imagen,
            nombre: nombre,
            precio: precio,
@@ -46,7 +49,6 @@ export default function NewProduct() {
          //Ahora se resetean los valores de las variables
          setImagen('');
          setNombre('');
-         setGenero('');
          setTalla('');
          setMarca('');
          setCantidad(0);
@@ -74,9 +76,6 @@ export default function NewProduct() {
     }
     else if(e.target.name === 'nombre'){
       setNombre(value);
-    }
-    else if(e.target.name === 'genero'){
-      setGenero(value);///////////////////////////////OJO
     }
     else if(e.target.name === 'talla'){
       setTalla(value);

@@ -20,7 +20,6 @@ export async function insertNewProduct(product,coleccion){
   try {
     const docRef = collection(db,coleccion);
     await addDoc(docRef,product);
-    //return answer;
   } catch (error) {
     console.error(error);
   }
@@ -33,8 +32,6 @@ export async function getDocWithQuery(setProductD,col,firstElement,op,secondElem
     const q = query(colRef, where(firstElement, op, secondElement));
     const querySnapshot = await getDocs(q);    
     const data = querySnapshot.docs.map(doc => doc.data());
-    //console.log(data[0])
-    //setProductD(data[0])
     setProductD({...data[0]})
     //return data;
   } catch (error) {
@@ -45,9 +42,13 @@ export async function getDocWithQuery(setProductD,col,firstElement,op,secondElem
 
 //(☞ﾟヮﾟ)☞   
 const getElements = async (col) => {
-  const productosC = collection(db, col);
-  const productoSP = await getDocs(productosC);
-  return  productoSP.docs.map((element) => ({ ...element.data(), id: element.id }))
+  try{
+    const productosC = collection(db, col);
+    const productoSP = await getDocs(productosC);
+    return  productoSP.docs.map((element) => ({ ...element.data(), id: element.id }))
+  }catch(error){
+    console.log(error)
+  }
 };
 
 export { getElements };

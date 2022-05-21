@@ -22,7 +22,6 @@ export default function TableDisplay(props){
             </thead>
             <tbody>
                 {props.data.map(object => {
-                    console.log(object.id)
                     return(
                         <tr>
                             {props.columns.map((column)=>{
