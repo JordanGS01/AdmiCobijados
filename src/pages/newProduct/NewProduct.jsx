@@ -98,14 +98,16 @@ export default function NewProduct() {
   }
 
   return (
-    <div className="d-inline-flex p-2 flex-column border rounded">
+    <div className="d-inline-flex p-2 flex-column border rounded justify-content-center">
       <h1 className="display-2">Nuevo Producto</h1>
       <Form onSubmit={handleOnSubmit}>
-        <Form.Group className='mb-3' controlId='productFormImg'>
-          <Form.Label>Imagen</Form.Label>
-          <Form.Control name='img' type='text' placeholder='URL de la imágen' onChange={handleOnChange} required/>
-        </Form.Group>
-
+        <div className="NewProduct-DivDisplay">
+          <Form.Group className='mb-3 DivDisplay-ImgField' controlId='productFormImg'>
+            <Form.Label>Imagen</Form.Label>
+            <Form.Control name='img' type='text' placeholder='URL de la imágen' onChange={handleOnChange} required/>
+          </Form.Group>
+          <img src={imagen} className="imgaa"/>
+        </div>
         <Form.Group className='mb-3' controlId='productFormNombre'>
           <Form.Label>Nombre</Form.Label>
           <Form.Control name='nombre' type='text' placeholder='Nombre' onChange={handleOnChange} required/>
@@ -158,7 +160,7 @@ export default function NewProduct() {
         <Button variant="primary" type="submit">
           Crear
         </Button>
-      </Form>
+      </Form>      
     </div>
   );
 }

@@ -13,3 +13,16 @@
 .User-ComprasContainer{
     background-color: rgb(240, 240, 244);
 }
+
+.User-Img{
+    width: 100px;
+}
+
+.User-ComprasEfectuadasRow{
+    border-color: #ccc;
+    border-top: 1px solid #ccc;
+}
+
+.User-DisplayContentCenter{
+    text-align: center;
+}

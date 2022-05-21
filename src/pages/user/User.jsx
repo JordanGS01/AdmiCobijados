@@ -12,7 +12,7 @@ import Col from 'react-bootstrap/Col'
 export default function User() {
   const params = useParams();
   const [userData, setUserData] = useState({})
-  const [comprasUsuario, setComprasUsuario] = useState({})
+  const [comprasUsuario, setComprasUsuario] = useState([{}])
   
   async function fetchUserData(){
     setUserData(await getSpecificDoc('Usuarios',params.userId))
@@ -23,11 +23,20 @@ export default function User() {
     fetchUserData()
   }, [])
 
+  function getLenghtElement(arr){
+    try{
+      const len = arr.length
+      return(<p>{len}</p>)
+    }catch(error){
+      return(<p>0</p>)
+    }
+  }
+  
   return (
     <Container className="User-Container" fluid={true}>
       {/*Información del usuario*/}
       <Row>
-        <Col><img src={userData.img} alt="Imagen del usuario"/></Col>
+        <Col><img className="User-Img" src={userData.img} alt="Imagen del usuario"/></Col>
         <Col>
           <span className="User-RowDataTitles">
             Nombre
@@ -78,12 +87,12 @@ export default function User() {
             Fecha facturación
           </span>          
         </Col>
-        <Col>
+        <Col className="User-DisplayContentCenter">
           <span className="User-RowDataTitles">
             Cantidad productos
           </span>
         </Col>
-        <Col>
+        <Col className="User-DisplayContentCenter">
           <span className="User-RowDataTitles">
             Monto pagado
           </span>   
@@ -92,20 +101,20 @@ export default function User() {
       {comprasUsuario != undefined?//Nos sercioramos de que se haya cargado bien el componente
         comprasUsuario.map((compra) => {
           return(
-            <Row>
+            <Row sm={3} md={3} lg={3} className="User-ComprasEfectuadasRow">
                 <Col>
                   <p>{compra.fecha}</p>
                 </Col>
-                <Col>
-                  <p>{compra.productos.length}</p>
+                <Col className="User-DisplayContentCenter">
+                  {getLenghtElement(compra.productos)}
                 </Col>
-                <Col>
+                <Col className="User-DisplayContentCenter">
                   <p>{compra.total}</p>
                 </Col>
             </Row>
           )
         })
-      :<></>
+      :<></>      
       }      
     </Container>
   );
