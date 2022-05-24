@@ -1,105 +1,115 @@
 import "./productList.css";
 
-import { DataGrid } from "@material-ui/data-grid";
-import { DeleteOutline } from "@material-ui/icons";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getProducts } from "../../FireStore/data"
+import { Button } from "react-bootstrap";
+import TableDisplay from '../../components/TableDisplay/TableDisplay'
+import { BsPencilFill, BsTrashFill } from "react-icons/bs";
 
-import Button from 'react-bootstrap/Button'
+import { Link } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
+import { getElements, db } from '../../FireStore/dbInitialize'
+import { deleteDoc, doc } from "firebase/firestore"
 
 export default function ProductList() {  
-  const [data, setData] = useState([]);
-
-  async function uploadData(){
-    const uploadProducts = await getProducts()  
-    setData(uploadProducts) 
-  }
+  const [products, setProducts] = useState([]);                 
   
+  async function fetchProductData(){
+    const fetchedData = await getElements('Productos')
+    setProducts(fetchedData)
+  }
 
-  useEffect(() => {
-    uploadData();
-  }, []);
-
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+  const handleDelete = async(id) => {
+    setProducts(products.filter((item) => item.id !== id));
+    await deleteDoc(doc(db, 'Productos', id))
   };
 
-  const columns = [
-    { field: "id", headerName: "ID", width: 90 },
-    {
-      field: 'nombre', headerName: 'Nombre', width: 200      
-    },
-    { field: "cantidad", headerName: "Cant", width: 105 },
-    {
-      field: "img",
-      headerName: "Img",
-      width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="productListItem">
-            <img className="productListImg" src={params.row.img} alt="Imagen del producto" />
-            {params.row.name}
-          </div>
-        );
-      },
-    },
-    {
-      field: "precio",
-      headerName: "Precio",
-      width: 160,
-    },
-    {
-      field: "talla",
-      headerName: "Talla",
-      width: 106,
-    },
-    {
-      field: "categoria",
-      headerName: "Categoría",
-      width: 134,
-    },
-    {
-      field: "descripcion",
-      headerName: "Descripción",
-      width: 200,
-    },
-    {
-      field: "accion",
-      headerName: "Accion",
-      width: 150,
-      //${params.row.talla}/${params.row.img}/${params.row.categoria}/${params.row.cantidad}`}>
-      renderCell: (params) => {
-        return (
-          <>          
-            <Link to={`/product/${params.row.id}/${params.row.categoria}`}>
-              <button className="productListEdit">Editar</button>
-            </Link>
-            <DeleteOutline
-              className="productListDelete"
-              onClick={() => handleDelete(params.row.id)}
-            />
-          </>
-        );
-      },
-    },
-  ];
+  const columns = useMemo(
+    () => [
+        {
+          Header: 'Id',
+          accessor: 'id',
+        },
+        {
+          Header: 'Nombre',
+          accessor: 'nombre',
+        },
+        {
+          Header: 'Img',
+          accessor: 'img',
+          Cell: ({ row }) => (
+            <img className="TableRowImg" src={row.values.img} />
+          )
+        },
+        {
+          Header: 'Categoria',
+          accessor: 'categoria',
+        },
+        {
+          Header: 'Descripcion',
+          accessor: 'descripcion',
+        },
+        {
+          Header: 'Talla',
+          accessor: 'talla',
+        },
+        {
+          Header: 'Marca',
+          accessor: 'marca',
+        },
+        {
+          Header: 'Cantidad',
+          accessor: 'cantidad',
+        },
+        {
+          Header: 'Precio',
+          accessor: 'precio',
+        },
+    ],
+    []
+  )
 
+  const productsData = useMemo(() => [...products],[products])
+
+  const tableHooks = (hooks) => {
+    hooks.visibleColumns.push((columns) => [
+      ...columns,
+      {
+        id: "acciones",
+        Header: "Acciones",
+        Cell: ({ row }) => (
+          <>
+            <Button variant="primary" onClick={() => {if (window.confirm('¿Seguro que desea eliminar este item?')) handleDelete(row.values.id)}}> <BsTrashFill/> </Button>       
+            <Link to={`/product/${row.values.id}/${row.values.categoria}`}>
+              <Button variant="primary"> <BsPencilFill/> </Button>
+            </Link>
+          </>
+        ),
+      },
+    ]);
+  };
+
+  useEffect(() => {
+    fetchProductData()
+  }, [])
+
+  if(productsData)
   return (
     <div className="productList">
-      <Link to="/newproduct">
-        <Button variant="primary">Agregar producto</Button>        
-      </Link>
       
-      {
-      <DataGrid
-        rows={data}
-        disableSelectionOnClick
-        columns={columns}
-        pageSize={10}
-        checkboxSelection
+      <Link to="/newproduct">
+        <Button variant="primary">Nuevo producto</Button>
+      </Link>
+
+      <input type="text" placeholder='Nombre producto'/>
+      <Button variant="primary">Buscar</Button>
+
+      
+      <TableDisplay 
+          columns={columns}
+          data={productsData}
+          tHooks = {tableHooks}
       />
-      }
     </div>
+        
   );
+
 }
