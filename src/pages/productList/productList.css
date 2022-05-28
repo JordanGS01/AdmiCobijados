@@ -1,0 +1,21 @@
+.TableRowImg{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+
+.buttonNew{
+    margin-left: 88%;
+    margin-block-end: -2%;
+};
+
+.actionButton {
+  background-color: brown;
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  margin-block-end: -50%; 
+  border-radius: 50%;
+}
