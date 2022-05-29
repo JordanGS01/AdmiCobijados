@@ -9,6 +9,7 @@ import { useEffect, useState, useMemo } from "react";
 import { getElements} from '../../data/adminMetodos'
 import { deleteDoc, doc } from "firebase/firestore"
 import Topbar from "../../components/Admin/topbar/Topbar"
+import swal from 'sweetalert'
 
 export default function ProductList() { 
   const [products, setProducts] = useState([]);
@@ -85,6 +86,26 @@ export default function ProductList() {
     []
   )
 
+  const deleteConfirmation = (row) => {
+    swal({
+      title: "Deseas eliminar de FireBase a: "+row.values.nombre,
+      text: "El producto se eliminará permanente de FireBase",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        handleDelete(row.values.id)
+        swal("El producto se ha eliminado correctamente!", {
+          icon: "success",
+        });
+      } else {
+        swal({title: "Cancelado!", icon: "error"});
+      }
+    });
+  }
+
   const productsData = useMemo(() => [...products],[products])
 
   const tableHooks = (hooks) => {
@@ -95,83 +116,12 @@ export default function ProductList() {
         Header: "Acciones",
         Cell: ({ row }) => (
           <div>
-            <Button margin="10px" variant="primary" onClick={() => {if (window.confirm('¿Seguro que desea eliminar este item?')) handleDelete(row.values.id)}}> <BsTrashFill/> </Button>             
+            <Button margin="10px" variant="primary" onClick={() => {deleteConfirmation(row)}}> <BsTrashFill/> </Button>             
+                       
             <Link to={`/product/${row.values.id}/${row.values.categoria}`}>
               <Button variant="primary"> <BsPencilFill/> </Button>
             </Link>
-            
-            {/* <div>
-                  <Button variant="primary" onClick={handleShow2}> <BsPencilFill/> </Button> 
-            </div> */}
-            
-          {/* <Modal show={show2} onHide={handleClose2}>
-        <Modal.Header closeButton>
-          <Modal.Title>Actualizar un Producto</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        <Form onSubmit={sendproducts}>
-        <div className="NewProduct-DivDisplay">
-          <Form.Group className='mb-3 DivDisplay-ImgField' controlId='productFormImg'>
-            <Form.Label>Imagen</Form.Label>
-            <Form.Control name='img' type='text' placeholder={productD.img} onChange={handleInputChange} required/>
-          </Form.Group>
-          <img src={productD.img} className="imgaa"/>
-        </div>
-        <Form.Group className='mb-3' controlId='productFormNombre'>
-          <Form.Label>Nombre</Form.Label>
-          <Form.Control name='nombre' type='text' placeholder={productD.nombre} onChange={handleInputChange} required/>
-        </Form.Group>
-
-        <Form.Group className='mb-3' controlId='productFormTalla'>
-          <Form.Label>Talla</Form.Label>
-          <Form.Select name='talla' onChange={handleInputChange}>
-            <option value="" selected></option>
-            <option value="XXS">XXS</option>
-            <option value="XS">XS</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-            <option value="XXL">XXL</option>
-          </Form.Select>
-        </Form.Group>
-
-        <Form.Group className='mb-3' controlId='productFormCantidad'>
-          <Form.Label>Cantidad</Form.Label>
-          <Form.Control name='cantidad' type='number' placeholder={productD.cantidad} onChange={handleInputChange} required/>
-        </Form.Group>
-
-        <Form.Group className='mb-3' controlId='productFormPrecio'>
-          <Form.Label>Precio</Form.Label>
-          <Form.Control name='precio' type='number' placeholder={productD.precio} onChange={handleInputChange} required/>
-        </Form.Group>
-
-        <Form.Group className='mb-3' controlId='productFormMarca'>
-          <Form.Label>Marca</Form.Label>
-          <Form.Control name='marca' type='text' placeholder={productD.marca} onChange={handleInputChange} required/>
-        </Form.Group>
-
-        <Form.Group className='mb-3' controlId='productFormCategoria'>
-          <Form.Label>Categoría</Form.Label>
-          <Form.Select name='categoria' onChange={handleInputChange}>
-            <option value="" selected></option>
-            <option value="Adulto">Adultos</option>
-            <option value="Niños">Niños</option>
-            <option value="Jovenes">Jovenes</option>
-          </Form.Select>
-        </Form.Group>
-        
-        <Form.Group className="mb-3" controlId="productFormDescripción">
-          <Form.Label>Descripción</Form.Label>
-          <Form.Control name="descripcion" as="textarea" rows={3} placeholder={productD.descripcion} handleOnChange={handleInputChange}/>
-        </Form.Group>        
-
-        <Button variant="primary" type="submit" className="btn" onClick={(event) => {if (window.confirm('¿Seguro que desea modificar: '+ productD.nombre)) sendproducts(event)}}>
-          Actualizar
-        </Button>
-      </Form> 
-        </Modal.Body>
-      </Modal> */}
+          
           </div>        
         ),
       },
@@ -207,11 +157,6 @@ export default function ProductList() {
   }
 
   function addData(){
-    console.log(imagen)
-    console.log(nombre)
-    console.log(talla)
-    console.log(categoria)
-    console.log(precio)
     if(imagen !== '' &&
        nombre !== '' &&
        talla  !== '' &&
@@ -254,6 +199,14 @@ export default function ProductList() {
     fetchProductData()
   }, [])
 
+  const funtionSwal = () => {
+      swal({
+        title: "Producto Creado!",
+        text: "El producto se agregó a FireBase!", 
+        icon: "success",
+      })
+  }
+
   if(productsData)
   return (
     <>
@@ -264,16 +217,16 @@ export default function ProductList() {
         <Button variant="primary" onClick={handleShow}>Nuevo producto</Button>
         </div>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal className="modal" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Crear un Nuevo Producto</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="modalBody">
         <Form onSubmit={handleOnSubmit}>
-        <div className="NewProduct-DivDisplay">
-          <Form.Group className='mb-3 DivDisplay-ImgField' controlId='productFormImg'>
+        <div>
+          <Form.Group controlId='productFormImg'>
             <Form.Label>Imagen</Form.Label>
-            <Form.Control name='img' type='text' placeholder='URL de la imágen' onChange={handleOnChange} required/>
+            <Form.Control autoFocus name='img' type='text' placeholder='URL de la imágen' onChange={handleOnChange} required/>
           </Form.Group>
           <img src={imagen} className="imgaa"/>
         </div>
@@ -325,10 +278,9 @@ export default function ProductList() {
           <Form.Label>Descripción</Form.Label>
           <Form.Control name="descripcion" as="textarea" rows={3} onChange={handleOnChange}/>
         </Form.Group>        
-
-        <Button variant="primary" type="submit">
-          Crear
-        </Button>
+            <Button variant="primary" type="submit" onClick={funtionSwal}>
+              Crear 
+            </Button>
       
       </Form>
         </Modal.Body>

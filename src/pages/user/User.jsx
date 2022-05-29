@@ -4,6 +4,8 @@ import Topbar from "../../components/Admin/topbar/Topbar";
 import { getSpecificDoc } from "../../data/data";
 import { getDocsWithQuery } from "../../data/data";
 import { useEffect, useState } from "react";
+import { Button, Modal } from "react-bootstrap";
+import { FcKindle } from "react-icons/fc";
 
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -13,6 +15,10 @@ export default function User() {
   const params = useParams();
   const [userData, setUserData] = useState({})
   const [comprasUsuario, setComprasUsuario] = useState([{}])
+  // const [show, setShow] = useState(false);
+  
+  // const handleClose = () => setShow(false);
+  // const handleShow = () => setShow(true);  
   
   async function fetchUserData(){
     setUserData(await getSpecificDoc('Usuarios',params.userId))
@@ -94,6 +100,8 @@ export default function User() {
           <span className="User-RowDataTitles">
             Cantidad productos
           </span>
+          {/* <Button className="buttonMore" onClick={handleShow}><FcKindle/></Button> */}
+
         </Col>
         <Col className="User-DisplayContentCenter">
           <span className="User-RowDataTitles">
@@ -110,6 +118,32 @@ export default function User() {
                 </Col>
                 <Col className="User-DisplayContentCenter">
                   {getLenghtElement(compra.productos)}
+                  
+        {/* <Modal
+        show={show}
+        onHide={() => setShow(false)}
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-custom-modal-styling-title">
+            Registro de Facturas de :{userData.nombre}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Row>
+            <Col>
+              {compra.productos.map(articulo => articulo.articulo.nombre)}
+            </Col>
+            <Col>
+              {compra.productos.map(articulo => articulo.articulo.precio)}
+            </Col>
+            <Col>
+              {compra.productos.map(articulo => articulo.articulo.fecha)}
+            </Col>
+          </Row>
+        </Modal.Body>
+      </Modal>                  */}
                 </Col>
                 <Col className="User-DisplayContentCenter">
                   <p>{compra.total}</p>

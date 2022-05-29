@@ -8,6 +8,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { Container } from "react-bootstrap";
 import Topbar from "../../components/Admin/topbar/Topbar";
+import swal from 'sweetalert'
 
 export default function Product() {
 const params = useParams();
@@ -57,6 +58,28 @@ useEffect(() => {
    fetchProductData()              
 }, [])
 
+const updateConfirmation = (event, product) => {
+  console.log(product)
+  swal({
+    title: "Estas seguro que quieres actualizar este producto?",
+    text: "El producto se actualizará en FireBase!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+      sendproducts(event)
+      swal("El producto se ha actualizado correctamente!", {
+        icon: "success",
+      });
+      window.location.href = "/products"
+    } else {
+      swal({title: "Cancelado!", icon: "error"});
+    }
+  });
+}
+
 return (
   <>
   <Topbar/>
@@ -68,13 +91,13 @@ return (
         <div className="NewProduct-DivDisplay">
           <Form.Group className='mb-3 DivDisplay-ImgField' controlId='productFormImg'>
             <Form.Label>Imagen</Form.Label>
-            <Form.Control name='img' type='text' placeholder={productD.img} onChange={handleInputChange} required/>
+            <Form.Control name='img' type='text' placeholder={productD.img} onChange={handleInputChange}/>
           </Form.Group>
           <img src={productD.img} className="imgaa"/>
         </div>
         <Form.Group className='mb-3' controlId='productFormNombre'>
           <Form.Label>Nombre</Form.Label>
-          <Form.Control name='nombre' type='text' placeholder={productD.nombre} onChange={handleInputChange} required/>
+          <Form.Control name='nombre' type='text' placeholder={productD.nombre} onChange={handleInputChange}/>
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='productFormTalla'>
@@ -93,17 +116,17 @@ return (
 
         <Form.Group className='mb-3' controlId='productFormCantidad'>
           <Form.Label>Cantidad</Form.Label>
-          <Form.Control name='cantidad' type='number' placeholder={productD.cantidad} onChange={handleInputChange} required/>
+          <Form.Control name='cantidad' type='number' placeholder={productD.cantidad} onChange={handleInputChange} />
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='productFormPrecio'>
           <Form.Label>Precio</Form.Label>
-          <Form.Control name='precio' type='number' placeholder={productD.precio} onChange={handleInputChange} required/>
+          <Form.Control name='precio' type='number' placeholder={productD.precio} onChange={handleInputChange} />
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='productFormMarca'>
           <Form.Label>Marca</Form.Label>
-          <Form.Control name='marca' type='text' placeholder={productD.marca} onChange={handleInputChange} required/>
+          <Form.Control name='marca' type='text' placeholder={productD.marca} onChange={handleInputChange} />
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='productFormCategoria'>
@@ -118,10 +141,10 @@ return (
         
         <Form.Group className="mb-3" controlId="productFormDescripción">
           <Form.Label>Descripción</Form.Label>
-          <Form.Control name="descripcion" as="textarea" rows={3} placeholder={productD.descripcion} handleOnChange={handleInputChange}/>
+          <Form.Control name='descripcion' type='text' placeholder={productD.descripcion} onChange={handleInputChange} />
         </Form.Group>        
 
-        <Button variant="primary" type="submit" className="btn" onClick={(event) => {if (window.confirm('¿Seguro que desea modificar: '+ productD.nombre)) sendproducts(event)}}>
+        <Button variant="primary" type="submit" className="btn" onClick={(event) => {updateConfirmation(event, productD)}}>
           Actualizar
         </Button>
       </Form>      

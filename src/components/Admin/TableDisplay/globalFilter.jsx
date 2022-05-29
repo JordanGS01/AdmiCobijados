@@ -6,13 +6,16 @@ const SearchContainer = tw.div`
   mb-6
   mt-6
   flex
+  px-7 w-64
   items-center
+  text-black
 `;
 
 const SearchText = tw.h2`
   text-xl
 text-gray-600
   mr-6
+  font-semibold
 `;
 
 const Input = tw.input`
@@ -23,6 +26,7 @@ const Input = tw.input`
   outline-none
   p-4
   rounded-lg
+  font-semibold
 `;
 
 export function GlobalFilter({

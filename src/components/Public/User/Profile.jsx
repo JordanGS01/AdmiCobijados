@@ -59,7 +59,7 @@ const Profile = () => {
             >
               Historial de Compra
             </a>
-            {(userP.correo === "jonathan20.dev@gmail.com")&& <a style={{marginTop:"15px"}} className="btn btn-light border rounded-0 border-dark" href="/admin">Admin</a>} 
+            {(userP.correo === "jonathan20.dev@gmail.com" || "johanzamora14@gmail.com")&& <a style={{marginTop:"15px"}} className="btn btn-light border rounded-0 border-dark" href="/admin">Admin</a>} 
           </div>
         </div>
         <div className="col">
